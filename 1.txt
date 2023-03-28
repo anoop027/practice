@@ -1,2 +1,2 @@
-First line written and commited on remote
+updated from master - First line written and commited on remote
 Second line written from feature locally
