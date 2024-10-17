@@ -4,15 +4,22 @@ import app from '../src/index';
 describe('GET /', () => {
     let server: any;
 
-    beforeAll(async () => {
-        server = await app.listen(4000);
-    });
-
-    afterAll((done) => {
-        server.close((err: Error | null) => {
-            if (err) return done(err);
+    beforeAll((done) => {
+        server = app.listen(4000, () => {
+            console.log('Server is running on port 4000');
             done();
         });
+    });
+
+    afterAll(async () => {
+        if (server) {
+            await new Promise<void>((resolve, reject) => {
+                server.close((err: Error | null) => {
+                    if (err) return reject(err);
+                    resolve();
+                });
+            });
+        }
     });
 
     it('should return Hello, World!', async () => {
