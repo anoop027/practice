@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "dependencies": {
     "express": "^4.17.1"
