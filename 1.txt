@@ -1,4 +1,0 @@
-111111111112222222222222223333333333333333
-updated from master - First line written and commited on remote
-1.txt updated from feature - First line written and commited on remote
-Second line written from feature locally
