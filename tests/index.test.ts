@@ -4,14 +4,13 @@ import app from '../src/index';
 describe('GET /', () => {
     let server: any;
 
-    beforeAll((done) => {
-        server = app.listen(4000, () => {
-            done();
-        });
+    beforeAll(async () => {
+        server = await app.listen(4000);
     });
 
     afterAll((done) => {
-        server.close(() => {
+        server.close((err) => {
+            if (err) return done(err);
             done();
         });
     });
