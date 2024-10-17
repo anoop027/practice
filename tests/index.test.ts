@@ -9,7 +9,7 @@ describe('GET /', () => {
     });
 
     afterAll((done) => {
-        server.close((err) => {
+        server.close((err: Error | null) => {
             if (err) return done(err);
             done();
         });
