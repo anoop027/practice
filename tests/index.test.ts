@@ -11,7 +11,9 @@ describe('GET /', () => {
     });
 
     afterAll((done) => {
-        server.close(done);
+        server.close(() => {
+            done();
+        });
     });
 
     it('should return Hello, World!', async () => {
