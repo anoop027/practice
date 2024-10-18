@@ -1,24 +1,12 @@
 {
-  "name": "my-node-api",
+  "name": "simple-node-api",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "description": "A simple Node.js API for Google Cloud Functions",
+  "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "build": "tsc",
-    "test": "jest --detectOpenHandles"
+    "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.7",
-    "@types/supertest": "^2.0.11",
-    "jest": "^27.3.1",
-    "ts-jest": "^27.0.7",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.4.4",
-    "supertest": "^6.1.6"
   }
 }
