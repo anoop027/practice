@@ -10,4 +10,5 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 
-module.exports = nodefunction;
+module.exports = { nodefunction: app };  // Export the function as nodefunction
+
