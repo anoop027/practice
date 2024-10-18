@@ -34,6 +34,12 @@ jobs:
         name: build-artifacts
         path: dist
 
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
+        path: dist
+
     - name: Deploy to GCP
       env:
         GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
@@ -41,6 +47,7 @@ jobs:
         GCP_REGION: ${{ secrets.GCP_REGION }}
         GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
       run: |
+        echo $HOME
         echo $GCP_CREDENTIALS > ${HOME}/gcloud.json
         gcloud auth activate-service-account --key-file=${HOME}/gcloud.json
         gcloud config set project $GCP_PROJECT
