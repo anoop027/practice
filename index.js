@@ -5,10 +5,10 @@ app.get('/', (req, res) => {
     res.send('Hello, World!');
 });
 
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+// const port = process.env.PORT || 8080;
+// app.listen(port, () => {
+//     console.log(`Server is running on port ${port}`);
+// });
 
 module.exports = { nodefunction: app };  // Export the function as nodefunction
 
