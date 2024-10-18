@@ -53,5 +53,4 @@ jobs:
         echo $GCP_CREDENTIALS > ${HOME}/gcloud.json
         gcloud auth activate-service-account --key-file=${HOME}/gcloud.json
         gcloud config set project $GCP_PROJECT
-        gcloud projects add-iam-policy-binding $GCP_PROJECT --member="github-svc@awesome-pilot-439007-s9.iam.gserviceaccount.com" --role="roles/run.admin"
         gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source /home/runner/work/practice/practice
