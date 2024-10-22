@@ -65,8 +65,9 @@ jobs:
         echo $HOME
         pwd
         gcloud config set project $GCP_PROJECT
+        unzip build-artifacts.zip -d ./build-artifacts
         gcloud functions add-iam-policy-binding $GCP_FUNCTION_NAME \
         --region $GCP_REGION \
         --member="allUsers" \
         --role="roles/cloudfunctions.invoker"
-        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source build-artifacts.zip
+        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source build-artifacts
