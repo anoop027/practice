@@ -63,7 +63,7 @@ jobs:
         GCP_REGION: ${{ secrets.GCP_REGION }}
       run: |
         echo $HOME
-        echo pwd
+        pwd
         gcloud config set project $GCP_PROJECT
         gcloud functions add-iam-policy-binding $GCP_FUNCTION_NAME \
         --region $GCP_REGION \
