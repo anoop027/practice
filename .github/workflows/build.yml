@@ -42,20 +42,30 @@ jobs:
     #     name: build-artifacts
     #     path: dist
 
+    - name: Zip project
+      run: zip -r build-artifacts.zip .
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: build-artifacts.zip
+
+    - name: Authenticate to GCP
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+        
     - name: Deploy to GCP
       env:
         GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
         GCP_FUNCTION_NAME: ${{ secrets.GCP_FUNCTION_NAME }}
         GCP_REGION: ${{ secrets.GCP_REGION }}
-        GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
       run: |
         echo $HOME
-        echo $GCP_CREDENTIALS > ${HOME}/gcloud.json
-        gcloud auth activate-service-account --key-file=${HOME}/gcloud.json
         gcloud config set project $GCP_PROJECT
         gcloud functions add-iam-policy-binding $GCP_FUNCTION_NAME \
         --region $GCP_REGION \
         --member="allUsers" \
         --role="roles/cloudfunctions.invoker"
-
-        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source /home/runner/work/practice/practice
+        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source build-artifacts.zip
