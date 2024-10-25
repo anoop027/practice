@@ -55,6 +55,13 @@ jobs:
       uses: google-github-actions/auth@v1
       with:
         credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+    - name: Artifact upload to Google storage bucket
+      uses: google-github-actions/upload-cloud-storage@v1
+      with:
+        path: build-artifacts.zip
+        destination: gs://node-artifact/build-artifacts.zip
+
         
     - name: Deploy to GCP
       env:
@@ -70,4 +77,4 @@ jobs:
         --region $GCP_REGION \
         --member="allUsers" \
         --role="roles/cloudfunctions.invoker"
-        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source build-artifacts
+        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source gs://node-artifact/build-artifacts.zip
