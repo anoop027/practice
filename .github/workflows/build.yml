@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      ATIFACT_NAME: ${{ steps.set-output.outputs.ARTIFACT_NAME }}
+      ARTIFACT_NAME: ${{ steps.set-output.outputs.ARTIFACT_NAME }}
 
     steps:
     - name: Checkout code
