@@ -59,8 +59,8 @@ jobs:
     - name: Artifact upload to Google storage bucket
       uses: google-github-actions/upload-cloud-storage@v1
       with:
-        path: build-artifacts.zip
-        destination: gs://node-artifact/build-artifacts.zip
+        path: 'build-artifacts.zip'
+        destination: 'node-artifact'
 
         
     - name: Deploy to GCP
