@@ -41,15 +41,18 @@ jobs:
     #   with:
     #     name: build-artifacts
     #     path: dist
-
+    - name: Generate unique artifact name
+      id: vars
+      run: echo "ARTIFACT_NAME=build-artifact-${{ github.run_number }}.zip" >> $GITHUB_ENV
+      
     - name: Zip project
-      run: zip -r build-artifacts.zip .
+      run: zip -r ${{ env.ARTIFACT_NAME }} .
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build-artifacts
-        path: build-artifacts.zip
+        path: ${{ env.ARTIFACT_NAME }}
 
     - name: Authenticate to GCP
       uses: google-github-actions/auth@v1
@@ -59,7 +62,7 @@ jobs:
     - name: Artifact upload to Google storage bucket
       uses: google-github-actions/upload-cloud-storage@v1
       with:
-        path: 'build-artifacts.zip'
+        path: ${{ env.ARTIFACT_NAME }}
         destination: 'node-artifact'
 
         
@@ -77,4 +80,4 @@ jobs:
         --region $GCP_REGION \
         --member="allUsers" \
         --role="roles/cloudfunctions.invoker"
-        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source gs://node-artifact/build-artifacts.zip
+        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source gs://node-artifact/${{ env.ARTIFACT_NAME }}
