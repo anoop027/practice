@@ -9,6 +9,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    needs: build
+    
     steps:
     - name: Authenticate to GCP
       uses: google-github-actions/auth@v1
@@ -16,9 +18,10 @@ jobs:
         credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
     - name: Artifact upload to Google storage bucket
+
       uses: google-github-actions/upload-cloud-storage@v1
       with:
-        path: ${{ github.event.workflow_run.outputs.ARTIFACT_NAME }}
+        path: ${{ needs.build.outputs.ARTIFACT_NAME }}
         destination: 'node-artifact'
 
         
@@ -35,4 +38,4 @@ jobs:
         --region $GCP_REGION \
         --member="allUsers" \
         --role="roles/cloudfunctions.invoker"
-        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source gs://node-artifact/${{ github.event.workflow_run.outputs.ARTIFACT_NAME }}
+        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source gs://node-artifact/${{ needs.build.outputs.ARTIFACT_NAME }}
