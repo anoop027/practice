@@ -42,41 +42,14 @@ jobs:
     #     name: build-artifacts
     #     path: dist
     - name: Generate unique artifact name
-      id: vars
-      run: echo "ARTIFACT_NAME=build-artifact-${{ github.run_number }}.zip" >> $GITHUB_ENV
+      id: set-output
+      run: echo "ARTIFACT_NAME=build-artifact-${{ github.run_number }}.zip" >> $GITHUB_OUTPUT
       
     - name: Zip project
-      run: zip -r ${{ env.ARTIFACT_NAME }} .
+      run: zip -r ${{ steps.set-output.outputs.ARTIFACT_NAME }} .
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build-artifacts
-        path: ${{ env.ARTIFACT_NAME }}
-
-    - name: Authenticate to GCP
-      uses: google-github-actions/auth@v1
-      with:
-        credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-
-    - name: Artifact upload to Google storage bucket
-      uses: google-github-actions/upload-cloud-storage@v1
-      with:
-        path: ${{ env.ARTIFACT_NAME }}
-        destination: 'node-artifact'
-
-        
-    - name: Deploy to GCP
-      env:
-        GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
-        GCP_FUNCTION_NAME: ${{ secrets.GCP_FUNCTION_NAME }}
-        GCP_REGION: ${{ secrets.GCP_REGION }}
-      run: |
-        echo $HOME
-        pwd
-        gcloud config set project $GCP_PROJECT
-        gcloud functions add-iam-policy-binding $GCP_FUNCTION_NAME \
-        --region $GCP_REGION \
-        --member="allUsers" \
-        --role="roles/cloudfunctions.invoker"
-        gcloud functions deploy $GCP_FUNCTION_NAME --runtime nodejs16 --trigger-http --allow-unauthenticated --region $GCP_REGION --source gs://node-artifact/${{ env.ARTIFACT_NAME }}
+        path: ${{ steps.set-output.outputs.ARTIFACT_NAME }}
