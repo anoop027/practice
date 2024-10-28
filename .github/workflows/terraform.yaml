@@ -25,11 +25,21 @@ jobs:
     #   run: | 
     #     echo "${{ secrets.TF_VAR_GCP_CREDENTIALS }}" > gcp_credentials.json
     #     cat gcp_credentials.json
+    - name: Check if auth.json file exists
+      run: |
+        if [ ! -f "./gcp-terraform/auth.json" ]; then
+          echo "Error: auth.json file does not exist."
+          exit 1
+        fi
 
     - name: Initialize Terraform
       working-directory: ./gcp-terraform
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp-terraform/auth.json
       run: terraform init
 
     - name: Apply Terraform
       working-directory: ./gcp-terraform
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp-terraform/auth.json
       run: terraform apply -auto-approve
