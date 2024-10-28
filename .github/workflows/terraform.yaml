@@ -42,4 +42,4 @@ jobs:
       working-directory: ./gcp-terraform
       env:
         GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp-terraform/auth.json
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -lock=false
