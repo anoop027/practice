@@ -21,19 +21,15 @@ jobs:
       with:
         terraform_version: 1.0.0
 
-    - name: Authenticate to GCP
-      run: | 
-        echo "${{ secrets.GCP_CREDENTIALS }}" > gcp_credentials.json
-        cat gcp_credentials.json
+    # - name: Authenticate to GCP
+    #   run: | 
+    #     echo "${{ secrets.TF_VAR_GCP_CREDENTIALS }}" > gcp_credentials.json
+    #     cat gcp_credentials.json
 
     - name: Initialize Terraform
       working-directory: ./gcp-terraform
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp_credentials.json
       run: terraform init
 
     - name: Apply Terraform
       working-directory: ./gcp-terraform
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp_credentials.json
       run: terraform apply -auto-approve
