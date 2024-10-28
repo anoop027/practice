@@ -22,11 +22,13 @@ jobs:
         terraform_version: 1.0.0
 
     - name: Initialize Terraform
+      working-directory: ./gcp-terraform
       env:
         TF_VAR_GCP_CREDENTIALS: ${{ secrets.TF_VAR_GCP_CREDENTIALS }}
       run: terraform init
 
     - name: Apply Terraform
+      working-directory: ./gcp-terraform
       env:
         TF_VAR_GCP_CREDENTIALS: ${{ secrets.TF_VAR_GCP_CREDENTIALS }}
       run: terraform apply -auto-approve
