@@ -1,0 +1,32 @@
+name: terraform apply
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout current repo
+      uses: actions/checkout@v2
+
+    - name: Clone read-only repo
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: git clone https://anoop027:${{ secrets.GH_TOKEN }}@github.com/anoop027/gcp-terraform.git
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.0.0
+
+    - name: Initialize Terraform
+      env:
+        TF_VAR_GCP_CREDENTIALS: ${{ secrets.TF_VAR_GCP_CREDENTIALS }}
+      run: terraform init
+
+    - name: Apply Terraform
+      env:
+        TF_VAR_GCP_CREDENTIALS: ${{ secrets.TF_VAR_GCP_CREDENTIALS }}
+      run: terraform apply -auto-approve
