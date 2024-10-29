@@ -11,12 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Download build artifacts
+    - name: Download Artifact
       uses: actions/download-artifact@v4
       with:
-       name: build-artifacts
-       path: ./
-       run-id: 11569715756
+          name: build-artifacts
+          path: ./
+          github-token: "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"
+          repository: ${{ github.repository }}
+          run-id: 11569715756
        
     - name: Authenticate to GCP
       uses: google-github-actions/auth@v1
