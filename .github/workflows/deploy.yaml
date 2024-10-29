@@ -5,11 +5,11 @@ on:
     workflows: ["Build"]
     types:
       - completed
+   workflow_dispatch:
 
 jobs:
   artifact_upload:
     runs-on: ubuntu-latest
-    needs: build
     
     steps:
     - name: Authenticate to GCP
