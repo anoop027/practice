@@ -4,6 +4,7 @@
   "description": "A simple Node.js API for Google Cloud Functions",
   "main": "index.js",
   "scripts": {
+    "build": "echo 'No build step required'",
     "start": "node index.js"
   },
   "dependencies": {
