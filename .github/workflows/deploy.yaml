@@ -5,28 +5,29 @@ on:
     workflows: ["Build"]
     types:
       - completed
-   workflow_dispatch:
 
 jobs:
-  artifact_upload:
+  deploy:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+       name: build-artifacts
+       path: ./
+       
     - name: Authenticate to GCP
       uses: google-github-actions/auth@v1
       with:
         credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
     - name: Artifact upload to Google storage bucket
-
       uses: google-github-actions/upload-cloud-storage@v1
       with:
         path: ${{ needs.build.outputs.ARTIFACT_NAME }}
         destination: 'node-artifact'
 
-  deploy:  
-    runs-on: ubuntu-latest
-    steps:
     - name: Deploy to GCP
       env:
         GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
