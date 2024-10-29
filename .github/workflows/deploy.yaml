@@ -6,6 +6,10 @@ on:
     types:
       - completed
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -16,7 +20,6 @@ jobs:
       with:
           name: build-artifacts
           path: ./
-          github-token: "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"
           repository: ${{ github.repository }}
           run-id: 11569715756
        
