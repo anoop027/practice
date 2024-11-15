@@ -7,8 +7,6 @@ on:
       - development
   workflow_dispatch:
 
-env:
-  ENV_NAME: ${{ github.ref == 'refs/heads/master' && 'production' || 'development' }}
 
 permissions:
   contents: read
@@ -19,12 +17,20 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: ${{ env.ENV_NAME }}
+      name: ${{ github.ref == 'refs/heads/master' && 'production' || 'development' }}
     
     outputs:
       ARTIFACT_NAME: ${{ steps.set-output.outputs.ARTIFACT_NAME }}
 
     steps:
+    - name: Set environment name
+      run: echo "ENV_NAME=${{ github.ref == 'refs/heads/master' && 'production' || 'development' }}" >> $GITHUB_ENV
+
+    - name: Fetch environment variables
+      run: | 
+         gh variable list --json name,value -e $ENV_NAME > variables-$ENV_NAME.json
+         cat variables-$ENV_NAME.json
+         cat variables-$ENV_NAME.json | jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -77,9 +83,17 @@ jobs:
     needs: build
     
     environment:
-      name: ${{ env.ENV_NAME }}
+      name: ${{ github.ref == 'refs/heads/master' && 'production' || 'development' }}
 
     steps:
+    - name: Set environment name
+      run: echo "ENV_NAME=${{ github.ref == 'refs/heads/master' && 'production' || 'development' }}" >> $GITHUB_ENV
+
+    - name: Fetch environment variables
+      run: | 
+       gh variable list --json name,value -e $ENV_NAME > variables-$ENV_NAME.json
+       cat variables-$ENV_NAME.json | jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
+    
     - name: fetch secret and env
       run: |
         echo ${{ env.DEMO_ENV }}
