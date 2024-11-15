@@ -38,6 +38,24 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
 
+    - name: fetch secret and env
+      run: |
+        echo ${{ env.DEMO_ENV }}
+        echo "secret fetched is: $TEST_SECRET"
+      env:
+        TEST_SECRET: ${{ secrets.DEMO_SECRET }}
+
+
+    - name: Write secret to a file
+      run: |
+          echo $TEST_SECRET > secret-value.txt
+          
+    - name: Upload secret value as artifact
+      uses: actions/upload-artifact@v2
+      with:
+          name: secret-value-artifact
+          path: secret-value.txt
+
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
@@ -58,26 +76,19 @@ jobs:
     #   with:
     #     name: build-artifacts
     #     path: dist
-
-    - name: fetch secret and env
-      run: |
-        echo ${{ env.DEMO_ENV }}
-        echo "secret fetched is: $TEST_SECRET"
-      env:
-        TEST_SECRET: ${{ secrets.DEMO_SECRET }}
     
-    - name: Generate unique artifact name
-      id: set-output
-      run: echo "ARTIFACT_NAME=build-artifact-${{ github.run_number }}.zip" >> $GITHUB_OUTPUT
+    # - name: Generate unique artifact name
+    #   id: set-output
+    #   run: echo "ARTIFACT_NAME=build-artifact-${{ github.run_number }}.zip" >> $GITHUB_OUTPUT
       
-    - name: Zip project
-      run: zip -r ${{ steps.set-output.outputs.ARTIFACT_NAME }} .
+    # - name: Zip project
+    #   run: zip -r ${{ steps.set-output.outputs.ARTIFACT_NAME }} .
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-artifacts
-        path: ${{ steps.set-output.outputs.ARTIFACT_NAME }}
+    # - name: Upload build artifacts
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: build-artifacts
+    #     path: ${{ steps.set-output.outputs.ARTIFACT_NAME }}
 
   deploy:
     runs-on: ubuntu-latest
