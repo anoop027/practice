@@ -59,13 +59,6 @@ jobs:
     #     name: build-artifacts
     #     path: dist
 
-    - name: fetch env vars
-      run: | 
-        gh variable list --json name,value -e $envname>variables-$envname.json
-        cat variables-$envname.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: fetch secret and env
       run: |
         echo ${{ env.DEMO_ENV }}
@@ -100,13 +93,17 @@ jobs:
 
     - name: Fetch environment variables
       run: | 
-       gh variable list --json name,value -e $ENV_NAME > variables-$ENV_NAME.json
-       cat variables-$ENV_NAME.json | jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
+         gh variable list --json name,value -e $ENV_NAME > variables-$ENV_NAME.json
+         cat variables-$ENV_NAME.json
+         cat variables-$ENV_NAME.json | jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}V
     
     - name: fetch secret and env
       run: |
         echo ${{ env.DEMO_ENV }}
         echo ${{ secrets.DEMO_SECRET }}
+        
     - name: Download build artifacts
       uses: actions/download-artifact@v4
       with:
