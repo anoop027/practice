@@ -7,6 +7,9 @@ on:
       - development
   workflow_dispatch:
 
+env:
+  ENV_NAME: ${{ github.ref == 'refs/heads/master' && 'production' || 'development' }}
+
 permissions:
   contents: read
   actions: write
@@ -14,6 +17,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    environment:
+      name: ${{ env.ENV_NAME }}
     
     outputs:
       ARTIFACT_NAME: ${{ steps.set-output.outputs.ARTIFACT_NAME }}
@@ -45,7 +51,7 @@ jobs:
 
     - name: fetch env vars
       run: | 
-        gh variable --list --json name,value -e $envname>variables-$envname.json
+        gh variable list --json name,value -e $envname>variables-$envname.json
         cat variables-$envname.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
 
     - name: fetch secret and env
@@ -71,9 +77,13 @@ jobs:
     needs: build
     
     environment:
-      name: ${{ github.ref == 'refs/heads/master' && 'production' || 'development' }}
+      name: ${{ env.ENV_NAME }}
 
     steps:
+    - name: fetch secret and env
+      run: |
+        echo ${{ env.DEMO_ENV }}
+        echo ${{ secrets.DEMO_SECRET }}
     - name: Download build artifacts
       uses: actions/download-artifact@v4
       with:
