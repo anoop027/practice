@@ -43,11 +43,16 @@ jobs:
     #     name: build-artifacts
     #     path: dist
 
-    # - name: Download build artifacts
-    #   uses: actions/download-artifact@v4
-    #   with:
-    #     name: build-artifacts
-    #     path: dist
+    - name: fetch env vars
+      run: | 
+        gh variable --list --json name,value -e $envname>variables-$envname.json
+        cat variables-$envname.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+
+    - name: fetch secret and env
+      run: |
+        echo ${{ env.DEMO_ENV }}
+        echo ${{ secrets.DEMO_SECRET }}
+    
     - name: Generate unique artifact name
       id: set-output
       run: echo "ARTIFACT_NAME=build-artifact-${{ github.run_number }}.zip" >> $GITHUB_OUTPUT
