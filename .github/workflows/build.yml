@@ -49,6 +49,8 @@ jobs:
     - name: Write secret to a file
       run: |
           echo $TEST_SECRET > secret-value.txt
+      env:
+        TEST_SECRET: ${{ secrets.DEMO_SECRET }}
           
     - name: Upload secret value as artifact
       uses: actions/upload-artifact@v4
