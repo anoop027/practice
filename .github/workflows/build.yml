@@ -31,6 +31,9 @@ jobs:
          gh variable list --json name,value -e $ENV_NAME > variables-$ENV_NAME.json
          cat variables-$ENV_NAME.json
          cat variables-$ENV_NAME.json | jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -59,6 +62,8 @@ jobs:
       run: | 
         gh variable list --json name,value -e $envname>variables-$envname.json
         cat variables-$envname.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: fetch secret and env
       run: |
