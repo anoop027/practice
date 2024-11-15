@@ -62,7 +62,7 @@ jobs:
     - name: fetch secret and env
       run: |
         echo ${{ env.DEMO_ENV }}
-        echo :secret fetched is: $TEST_SECRET"
+        echo "secret fetched is: $TEST_SECRET"
       env:
         TEST_SECRET: ${{ secrets.DEMO_SECRET }}
     
