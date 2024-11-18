@@ -83,7 +83,7 @@ jobs:
 
     - name: fetch secret and env
       run: |
-        source ${{ needs.setup.outputs.VARIABLES_FILE }}
+        source env-vars.sh
         echo ${{ env.DEMO_ENV }}
         echo "secret fetched is: $TEST_SECRET"
       env:
