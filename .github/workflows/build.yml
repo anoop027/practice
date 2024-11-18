@@ -21,6 +21,8 @@ jobs:
       ENV_NAME: ${{ steps.set-env.outputs.ENV_NAME }}
       VARIABLES_FILE: ${{ steps.fetch-vars.outputs.variables-file }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Determine Environment
         id: set-env
         run: |
