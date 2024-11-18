@@ -17,10 +17,14 @@ jobs:
    runs-on: ubuntu-latest
 
    steps:    
-    - name: Setup
-      uses: ./.github/workflows/setup
-      with:
-        gh_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Access fetched environment variables
+      run: |
+          echo "Environment Name: ${{ needs.fetch-vars.outputs.ENV_NAME }}"
+          echo "${{ needs.fetch-vars.outputs.variables }}" > .env
+          echo "${{ needs.fetch-vars.outputs.env_variables }}" >> .env
+          source .env
+          echo "Repo Variable: $MY_VAR"
+          echo "Environment Variable: $DB_PASSWORD"
         
     - name: Checkout code
       uses: actions/checkout@v4
