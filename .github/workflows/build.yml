@@ -32,15 +32,20 @@ jobs:
             echo "::set-output name=ENV_NAME::development"
           fi
 
-      - name: Fetch environment variables using GitHub CLI
-        id: fetch-vars
+      - name: Fetch environment variables
         run: |
           echo "Fetching environment variables for ${{ steps.set-env.outputs.ENV_NAME }}"
-          gh variable list --json name,value -e ${{ steps.set-env.outputs.ENV_NAME }} > env-vars.json
-          cat env-vars.json | jq -r '.[] | "\(.name)=\(.value)"' > env-vars.sh
-          echo "::set-output name=variables-file::env-vars.sh"
+          gh variable list --json name,value -e ${{ steps.set-env.outputs.ENV_NAME }} | \
+          jq -r '.[] | "\(.name)=\(.value)"' > env-vars.sh
         env:
           GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Cache environment variables
+        uses: actions/cache@v3
+        with:
+          path: env-vars.sh
+          key: env-vars-${{ steps.set-env.outputs.ENV_NAME }}
+
         
   build:
     runs-on: ubuntu-latest
@@ -68,6 +73,13 @@ jobs:
     #      cat variables-$ENV_NAME.json | jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
     #   env:
     #     GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+
+    - name: Restore environment variables from cache
+      uses: actions/cache@v3
+      with:
+          path: env-vars.sh
+          key: env-vars-${{ needs.common-vars.outputs.ENV_NAME }}
+          restore-keys: env-vars-
 
     - name: fetch secret and env
       run: |
