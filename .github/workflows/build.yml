@@ -78,8 +78,8 @@ jobs:
       uses: actions/cache@v3
       with:
           path: env-vars.sh
-          key: env-vars-${{ needs.common-vars.outputs.ENV_NAME }}
-          restore-keys: env-vars-
+          key: ${{ runner.os }}-${{ hashFiles('env-vars.sh') }}
+          restore-keys: Linux-
 
     - name: fetch secret and env
       run: |
