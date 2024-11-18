@@ -36,16 +36,20 @@ jobs:
         run: |
           echo "Fetching environment variables for ${{ steps.set-env.outputs.ENV_NAME }}"
           gh variable list --json name,value -e ${{ steps.set-env.outputs.ENV_NAME }} | \
-          jq -r '.[] | "\(.name)=\(.value)"' > env-vars.sh
+          jq -r '.[] | "\(.name)=\(.value)"' >> $GTIHUB_ENV
           cat env-vars.sh
         env:
           GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
 
-      - name: Cache environment variables
-        uses: actions/cache@v3
-        with:
-          path: env-vars.sh
-          key: ${{ runner.os }}-${{ hashFiles('env-vars.sh') }}
+      - name: Fetch environment variables
+        run: |
+           echo "Fetching environment variables for ${{ steps.set-env.outputs.ENV_NAME }}"
+           gh variable list --json name,value -e ${{ steps.set-env.outputs.ENV_NAME }} | \
+           jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
+
+      - name: Fetch environment variables
+        run: |
+           echo $DEMO_ENV
 
         
   build:
@@ -74,22 +78,6 @@ jobs:
     #      cat variables-$ENV_NAME.json | jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
     #   env:
     #     GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-
-    - name: Restore environment variables from cache
-      uses: actions/cache@v3
-      with:
-          path: env-vars.sh
-          key: ${{ runner.os }}-${{ hashFiles('env-vars.sh') }}
-          restore-keys: Linux-
-
-    - name: fetch secret and env
-      run: |
-        cat env-vars.sh
-        source env-vars.sh
-        echo $DEMO_ENV
-        echo "secret fetched is: $TEST_SECRET"
-      env:
-        TEST_SECRET: ${{ secrets.DEMO_SECRET }}
 
 
     - name: Write secret to a file
