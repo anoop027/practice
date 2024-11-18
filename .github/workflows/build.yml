@@ -37,15 +37,9 @@ jobs:
           echo "Fetching environment variables for ${{ steps.set-env.outputs.ENV_NAME }}"
           gh variable list --json name,value -e ${{ steps.set-env.outputs.ENV_NAME }} | \
           jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
-          cat env-vars.sh
         env:
           GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
 
-      - name: Fetch environment variables
-        run: |
-           echo "Fetching environment variables for ${{ steps.set-env.outputs.ENV_NAME }}"
-           gh variable list --json name,value -e ${{ steps.set-env.outputs.ENV_NAME }} | \
-           jq -r '.[] | "\(.name)=\(.value)"' >> $GITHUB_ENV
 
       - name: Fetch environment variables
         run: |
