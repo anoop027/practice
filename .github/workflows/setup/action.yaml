@@ -1,0 +1,37 @@
+name: 'Fetch Environment Variables'
+description: 'Fetch and set environment variables from GitHub repository and environment'
+
+inputs:
+  gh_token:
+    description: 'GitHub token'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+
+    - name: Export variables from repo
+      shell: bash
+      run: |
+        gh variable list --json name,value > REPO_VARIABLES.json
+        cat REPO_VARIABLES.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        
+    - name: Determine environment 
+      id: set-env
+      shell: bash
+      run: |
+       if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+         echo "ENV_NAME=production" >> $GITHUB_ENV
+       else
+         echo "ENV_NAME=development" >> $GITHUB_ENV
+
+    - name: Export variables from environment
+      shell: bash
+      run: |
+         echo "Fetching environment variables for $ENV_NAME"
+         gh variable list --json name,value -e $ENV_NAME > VARIABLES-$ENV_NAME.json
+         cat VARIABLES-$ENV_NAME.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
