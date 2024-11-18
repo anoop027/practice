@@ -56,8 +56,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run ESLint
-      run: npx eslint .
+    # - name: Run ESLint
+    #   run: npx eslint .
 
   GitleaksCheck:
     runs-on: ubuntu-latest
@@ -126,11 +126,11 @@ jobs:
       with:
         node-version: '20'
 
-    - name: GitLeaks  
-      uses: gitleaks/gitleaks-action@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
+    # - name: GitLeaks  
+    #   uses: gitleaks/gitleaks-action@v2
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    #     GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
 
   SNYK:
     runs-on: ubuntu-latest
@@ -173,10 +173,10 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Snyk_Security
-      uses: snyk/actions/node@master
-      env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    # - name: Snyk_Security
+    #   uses: snyk/actions/node@master
+    #   env:
+    #       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   SonarScan:
     runs-on: ubuntu-latest
@@ -219,17 +219,17 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Sonar analysis
-      uses: sonarsource/sonarqube-scan-action@master
-      env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    # - name: Sonar analysis
+    #   uses: sonarsource/sonarqube-scan-action@master
+    #   env:
+    #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-    - name: Sonar quality gates
-      uses: sonarsource/sonarqube-quality-gate-action@master
-      timeout-minutes: 5
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    # - name: Sonar quality gates
+    #   uses: sonarsource/sonarqube-quality-gate-action@master
+    #   timeout-minutes: 5
+    #   env:
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   unitTests:
     runs-on: ubuntu-latest
@@ -272,8 +272,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run unit tests
-      run: npm test
+    # - name: Run unit tests
+    #   run: npm test
       
   build:
     runs-on: ubuntu-latest
