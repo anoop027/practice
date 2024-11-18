@@ -367,6 +367,32 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
+    - name: fetch secret and env
+      run: |
+        echo ${{ env.DEMO_ENV }}
+        echo ${{ secrets.DEMO_SECRET }}
+
+    - name: Write secret to a file
+      run: |
+          echo $TEST_SECRET2 > secret-value3.txt
+      env:
+        TEST_SECRET2: ${{ secrets.DEMO_SECRET }}
+
+    - name: Fetch the correct secret
+      run: |
+       echo "Fetching secret for $ENV_NAME"
+       if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+        echo "Production secret: ${{ secrets.DEMO_SECRET }}"
+       else
+        echo "Development secret: ${{ secrets.DEMO_SECRET }}"
+       fi
+          
+    - name: Upload secret value as artifact
+      uses: actions/upload-artifact@v4
+      with:
+          name: secret-value-artifact3
+          path: secret-value3.txt
+
     - name: Authenticate to GCP
       id: auth
       uses: google-github-actions/auth@v2
