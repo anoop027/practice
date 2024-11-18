@@ -81,6 +81,7 @@ jobs:
          echo "ENV_NAME=production" >> $GITHUB_ENV
        else
          echo "ENV_NAME=development" >> $GITHUB_ENV
+       fi
          
     - name: Export variables from environment
       shell: bash
@@ -124,6 +125,7 @@ jobs:
          echo "ENV_NAME=production" >> $GITHUB_ENV
        else
          echo "ENV_NAME=development" >> $GITHUB_ENV
+       fi
          
     - name: Export variables from environment
       shell: bash
@@ -169,6 +171,7 @@ jobs:
          echo "ENV_NAME=production" >> $GITHUB_ENV
        else
          echo "ENV_NAME=development" >> $GITHUB_ENV
+       fi
          
     - name: Export variables from environment
       shell: bash
@@ -221,6 +224,7 @@ jobs:
          echo "ENV_NAME=production" >> $GITHUB_ENV
        else
          echo "ENV_NAME=development" >> $GITHUB_ENV
+       fi
          
     - name: Export variables from environment
       shell: bash
@@ -265,6 +269,7 @@ jobs:
          echo "ENV_NAME=production" >> $GITHUB_ENV
        else
          echo "ENV_NAME=development" >> $GITHUB_ENV
+       fi
          
     - name: Export variables from environment
       shell: bash
@@ -322,6 +327,7 @@ jobs:
          echo "ENV_NAME=production" >> $GITHUB_ENV
        else
          echo "ENV_NAME=development" >> $GITHUB_ENV
+       fi
          
     - name: Export variables from environment
       shell: bash
