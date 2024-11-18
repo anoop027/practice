@@ -44,7 +44,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: env-vars.sh
-          key: env-vars-${{ steps.set-env.outputs.ENV_NAME }}
+          key: ${{ runner.os }}-${{ hashFiles('env-vars.sh') }}
 
         
   build:
