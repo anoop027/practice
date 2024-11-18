@@ -86,7 +86,7 @@ jobs:
       run: |
         cat env-vars.sh
         source env-vars.sh
-        echo ${{ env.DEMO_ENV }}
+        echo $DEMO_ENV
         echo "secret fetched is: $TEST_SECRET"
       env:
         TEST_SECRET: ${{ secrets.DEMO_SECRET }}
