@@ -37,6 +37,7 @@ jobs:
           echo "Fetching environment variables for ${{ steps.set-env.outputs.ENV_NAME }}"
           gh variable list --json name,value -e ${{ steps.set-env.outputs.ENV_NAME }} | \
           jq -r '.[] | "\(.name)=\(.value)"' > env-vars.sh
+          cat env-vars.sh
         env:
           GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
 
@@ -60,8 +61,8 @@ jobs:
       ARTIFACT_NAME: ${{ steps.set-output.outputs.ARTIFACT_NAME }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    # - name: Checkout code
+    #   uses: actions/checkout@v2
       
     # - name: Set environment name
     #   run: echo "ENV_NAME=production" >> $GITHUB_ENV
@@ -83,6 +84,7 @@ jobs:
 
     - name: fetch secret and env
       run: |
+        cat env-vars.sh
         source env-vars.sh
         echo ${{ env.DEMO_ENV }}
         echo "secret fetched is: $TEST_SECRET"
