@@ -1,37 +1,45 @@
 name: 'Fetch Environment Variables'
-description: 'Fetch and set environment variables from GitHub repository and environment'
 
-inputs:
-  gh_token:
-    description: 'GitHub token'
-    required: true
+on:
+  workflow_call:
+    inputs:
+      gh_token:
+        required: true
+        type: string
 
-runs:
-  using: 'composite'
-  steps:
+jobs:
+  fetch-vars:
+    runs-on: ubuntu-latest
+    outputs:
+      variables: ${{ steps.export-vars.outputs.variables }}
+      ENV_NAME: ${{ steps.set-env.outputs.ENV_NAME }}
+    steps:
+      - name: Export variables from repo
+        id: export-vars
+        run: |
+          echo "Fetching repository-level variables..."
+          gh variable list --json name,value > REPO_VARIABLES.json
+          VARIABLES=$(cat REPO_VARIABLES.json | jq -r 'map("\(.name)=\(.value)") | join("\n")')
+          echo "::set-output name=variables::$VARIABLES"
+        env:
+          GH_TOKEN: ${{ inputs.gh_token }}
 
-    - name: Export variables from repo
-      shell: bash
-      run: |
-        gh variable list --json name,value > REPO_VARIABLES.json
-        cat REPO_VARIABLES.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
-      env:
-        GH_TOKEN: ${{ inputs.gh_token }}
-        
-    - name: Determine environment 
-      id: set-env
-      shell: bash
-      run: |
-       if [ ${{ github.ref }} == 'refs/heads/main' ]; then
-         echo "ENV_NAME=production" >> $GITHUB_ENV
-       else
-         echo "ENV_NAME=development" >> $GITHUB_ENV
+      - name: Determine environment
+        id: set-env
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            echo "::set-output name=ENV_NAME::production"
+          else
+            echo "::set-output name=ENV_NAME::development"
+          fi
 
-    - name: Export variables from environment
-      shell: bash
-      run: |
-         echo "Fetching environment variables for $ENV_NAME"
-         gh variable list --json name,value -e $ENV_NAME > VARIABLES-$ENV_NAME.json
-         cat VARIABLES-$ENV_NAME.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
-      env:
-        GH_TOKEN: ${{ inputs.gh_token }}
+      - name: Export variables from environment
+        id: export-env-vars
+        run: |
+          source <(echo "${{ steps.export-vars.outputs.variables }}")
+          echo "Fetching environment-specific variables for $ENV_NAME..."
+          gh variable list --json name,value -e "$ENV_NAME" > VARIABLES-$ENV_NAME.json
+          ENV_VARIABLES=$(cat VARIABLES-$ENV_NAME.json | jq -r 'map("\(.name)=\(.value)") | join("\n")')
+          echo "::set-output name=env_variables::$ENV_VARIABLES"
+        env:
+          GH_TOKEN: ${{ inputs.gh_token }}
