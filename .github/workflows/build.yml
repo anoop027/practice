@@ -17,14 +17,32 @@ jobs:
    runs-on: ubuntu-latest
 
    steps:    
-    - name: Access fetched environment variables
+    - name: Export variables from repo
+      shell: bash
       run: |
-          echo "Environment Name: ${{ needs.fetch-vars.outputs.ENV_NAME }}"
-          echo "${{ needs.fetch-vars.outputs.variables }}" > .env
-          echo "${{ needs.fetch-vars.outputs.env_variables }}" >> .env
-          source .env
-          echo "Repo Variable: $MY_VAR"
-          echo "Environment Variable: $DB_PASSWORD"
+        gh variable list --json name,value > REPO_VARIABLES.json
+        cat REPO_VARIABLES.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        
+    - name: Determine environment 
+      id: set-env
+      shell: bash
+      run: |
+       if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+         echo "ENV_NAME=production" >> $GITHUB_ENV
+       else
+         echo "ENV_NAME=development" >> $GITHUB_ENV
+         
+    - name: Export variables from environment
+      shell: bash
+      run: |
+         echo "Fetching environment variables for $ENV_NAME"
+         gh variable list --json name,value -e $ENV_NAME > VARIABLES-$ENV_NAME.json
+         cat VARIABLES-$ENV_NAME.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        
         
     - name: Checkout code
       uses: actions/checkout@v4
@@ -44,10 +62,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Setup
-      uses: ./.github/workflows/setup
-      with:
-        gh_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Export variables from repo
+      shell: bash
+      run: |
+        gh variable list --json name,value > REPO_VARIABLES.json
+        cat REPO_VARIABLES.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        
+    - name: Determine environment 
+      id: set-env
+      shell: bash
+      run: |
+       if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+         echo "ENV_NAME=production" >> $GITHUB_ENV
+       else
+         echo "ENV_NAME=development" >> $GITHUB_ENV
+    - name: Export variables from environment
+      shell: bash
+      run: |
+         echo "Fetching environment variables for $ENV_NAME"
+         gh variable list --json name,value -e $ENV_NAME > VARIABLES-$ENV_NAME.json
+         cat VARIABLES-$ENV_NAME.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
         
     - name: Checkout code
       uses: actions/checkout@v4
@@ -67,10 +105,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Setup
-      uses: ./.github/workflows/setup
-      with:
-        gh_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Export variables from repo
+      shell: bash
+      run: |
+        gh variable list --json name,value > REPO_VARIABLES.json
+        cat REPO_VARIABLES.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        
+    - name: Determine environment 
+      id: set-env
+      shell: bash
+      run: |
+       if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+         echo "ENV_NAME=production" >> $GITHUB_ENV
+       else
+         echo "ENV_NAME=development" >> $GITHUB_ENV
+    - name: Export variables from environment
+      shell: bash
+      run: |
+         echo "Fetching environment variables for $ENV_NAME"
+         gh variable list --json name,value -e $ENV_NAME > VARIABLES-$ENV_NAME.json
+         cat VARIABLES-$ENV_NAME.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
         
     - name: Checkout code
       uses: actions/checkout@v4
@@ -92,10 +150,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Setup
-      uses: ./.github/workflows/setup
-      with:
-        gh_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Export variables from repo
+      shell: bash
+      run: |
+        gh variable list --json name,value > REPO_VARIABLES.json
+        cat REPO_VARIABLES.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        
+    - name: Determine environment 
+      id: set-env
+      shell: bash
+      run: |
+       if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+         echo "ENV_NAME=production" >> $GITHUB_ENV
+       else
+         echo "ENV_NAME=development" >> $GITHUB_ENV
+    - name: Export variables from environment
+      shell: bash
+      run: |
+         echo "Fetching environment variables for $ENV_NAME"
+         gh variable list --json name,value -e $ENV_NAME > VARIABLES-$ENV_NAME.json
+         cat VARIABLES-$ENV_NAME.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
         
     - name: Checkout code
       uses: actions/checkout@v4
@@ -124,10 +202,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Setup
-      uses: ./.github/workflows/setup
-      with:
-        gh_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Export variables from repo
+      shell: bash
+      run: |
+        gh variable list --json name,value > REPO_VARIABLES.json
+        cat REPO_VARIABLES.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        
+    - name: Determine environment 
+      id: set-env
+      shell: bash
+      run: |
+       if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+         echo "ENV_NAME=production" >> $GITHUB_ENV
+       else
+         echo "ENV_NAME=development" >> $GITHUB_ENV
+    - name: Export variables from environment
+      shell: bash
+      run: |
+         echo "Fetching environment variables for $ENV_NAME"
+         gh variable list --json name,value -e $ENV_NAME > VARIABLES-$ENV_NAME.json
+         cat VARIABLES-$ENV_NAME.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
         
     - name: Checkout code
       uses: actions/checkout@v4
@@ -148,10 +246,30 @@ jobs:
     needs: [ CodestyleCheck , GitleaksCheck, SNYK, SonarScan, unitTests ]
 
     steps:
-    - name: Setup
-      uses: ./.github/workflows/setup
-      with:
-        gh_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Export variables from repo
+      shell: bash
+      run: |
+        gh variable list --json name,value > REPO_VARIABLES.json
+        cat REPO_VARIABLES.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        
+    - name: Determine environment 
+      id: set-env
+      shell: bash
+      run: |
+       if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+         echo "ENV_NAME=production" >> $GITHUB_ENV
+       else
+         echo "ENV_NAME=development" >> $GITHUB_ENV
+    - name: Export variables from environment
+      shell: bash
+      run: |
+         echo "Fetching environment variables for $ENV_NAME"
+         gh variable list --json name,value -e $ENV_NAME > VARIABLES-$ENV_NAME.json
+         cat VARIABLES-$ENV_NAME.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
         
     - name: Checkout code
       uses: actions/checkout@v4
@@ -185,10 +303,30 @@ jobs:
       name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
 
     steps:
-    - name: Setup
-      uses: ./.github/workflows/setup
-      with:
-        gh_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Export variables from repo
+      shell: bash
+      run: |
+        gh variable list --json name,value > REPO_VARIABLES.json
+        cat REPO_VARIABLES.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        
+    - name: Determine environment 
+      id: set-env
+      shell: bash
+      run: |
+       if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+         echo "ENV_NAME=production" >> $GITHUB_ENV
+       else
+         echo "ENV_NAME=development" >> $GITHUB_ENV
+    - name: Export variables from environment
+      shell: bash
+      run: |
+         echo "Fetching environment variables for $ENV_NAME"
+         gh variable list --json name,value -e $ENV_NAME > VARIABLES-$ENV_NAME.json
+         cat VARIABLES-$ENV_NAME.json | jq -r '.[]|"\(.name)=\(.value)"' >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
         
     - name: Checkout code
       uses: actions/checkout@v4
