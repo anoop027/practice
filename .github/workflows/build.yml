@@ -100,7 +100,7 @@ jobs:
     - name: GitLeaks  
       uses: gitleaks/gitleaks-action@v2
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
 
   SNYK:
@@ -145,9 +145,9 @@ jobs:
       run: npm install
 
     - name: Snyk_Security
-      uses: procter-gamble/de-atom-library@snyk-main
-      with:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      uses: snyk/actions/node@master
+      env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   SonarScan:
     runs-on: ubuntu-latest
