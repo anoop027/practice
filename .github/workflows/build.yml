@@ -80,13 +80,12 @@ jobs:
       uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: awesome-pilot-439007-s9
-        export_default_credentials: true
 
     - name: Deploy Cloud Function
       run: |
        gcloud functions deploy node34 \
        --runtime nodejs16 \
-       --region ${{ vars.GCP_REGION }} \
+       --region us-east1 \
        --trigger-http \
        --allow-unauthenticated
       
