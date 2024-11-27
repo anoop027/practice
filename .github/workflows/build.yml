@@ -76,27 +76,46 @@ jobs:
         service_account: 'github-act-svc@awesome-pilot-439007-s9.iam.gserviceaccount.com'
         audience: 'g-actions'
 
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v2'
-      with:
-        version: '>= 363.0.0'
 
-    - name: 'verify gcloud'
-      run: |
+    - id: 'gcloud'
+      name: 'gcloud'
+      run: |-
+        gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
+        gcloud services list
         gcloud config list
         gcloud auth list
         gcloud projects list
         gcloud functions list --regions=us-east4
-
-    - name: Deploy Cloud Function
-      run: |
-          gcloud config set project awesome-pilot-439007-s9
-          gcloud functions deploy nodefunction33 \
+        gcloud functions deploy nodefunction33 \
               --verbosity=debug \
               --region=us-east4 \
               --runtime=nodejs20 \
               --trigger-http \
               --source=./function1/
+
+    # - name: 'Set up Cloud SDK'
+    #   uses: 'google-github-actions/setup-gcloud@v2'
+    #   with:
+    #     version: '>= 363.0.0'
+
+    # - name: 'verify gcloud'
+    #   run: |
+    #     gcloud config list
+    #     gcloud auth list
+    #     gcloud projects list
+    #     gcloud functions list --regions=us-east4
+
+    # - name: Deploy Cloud Function
+    #   run: |
+    #       gcloud config set project awesome-pilot-439007-s9
+    #       gcloud functions deploy nodefunction33 \
+    #           --verbosity=debug \
+    #           --region=us-east4 \
+    #           --runtime=nodejs20 \
+    #           --trigger-http \
+    #           --source=./function1/
+
+              
       
     # - name: Artifact upload to Google storage bucket
     #   uses: google-github-actions/upload-cloud-storage@v1
