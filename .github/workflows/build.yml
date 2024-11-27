@@ -116,3 +116,4 @@ jobs:
         region: us-east4
         runtime: nodejs20
         source_dir: ./function1/
+        entry_point: 'nodefunction33'
