@@ -112,16 +112,7 @@ jobs:
       uses: google-github-actions/deploy-cloud-functions@v3
       with:
         project_id: 'awesome-pilot-439007-s9'
-        name: 'nodefunction1'
+        name: 'nodefunction33'
         region: us-east1
-        runtime: nodejs16
+        runtime: nodejs20
         source_dir: ./function1/
-
-    - name: Deploy to GCP function2
-      uses: google-github-actions/deploy-cloud-functions@v3
-      with:
-        project_id: 'awesome-pilot-439007-s9'
-        name: 'nodefunction2'
-        region: us-east1
-        runtime: nodejs16
-        source_dir: ./function2/
