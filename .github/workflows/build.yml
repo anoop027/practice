@@ -91,12 +91,12 @@ jobs:
     - name: Deploy Cloud Function
       run: |
           gcloud config set project awesome-pilot-439007-s9
-          gcloud functions deploy shopifybulkexport \
+          gcloud functions deploy nodefunction33 \
               --verbosity=debug \
               --region=us-east4 \
               --runtime=nodejs20 \
               --trigger-http \
-              --source=./functions/shopifyBulkExport
+              --source=./function1/
       
     # - name: Artifact upload to Google storage bucket
     #   uses: google-github-actions/upload-cloud-storage@v1
