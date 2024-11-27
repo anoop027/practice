@@ -117,3 +117,4 @@ jobs:
         runtime: nodejs20
         source_dir: ./function1/
         entry_point: 'nodefunction33'
+        memory_mb: '256'
