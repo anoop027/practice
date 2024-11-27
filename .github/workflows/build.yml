@@ -91,6 +91,7 @@ jobs:
               --region=us-east4 \
               --runtime=nodejs20 \
               --trigger-http \
+              --memory=512MB
               --source=./function1/
 
     # - name: 'Set up Cloud SDK'
