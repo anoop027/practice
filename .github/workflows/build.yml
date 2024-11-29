@@ -82,31 +82,31 @@ jobs:
     #    path: ./build-artifacts
 
 
-    - name: Authenticate to GCP
-      id: auth
-      uses: google-github-actions/auth@v2
-      with:
-        workload_identity_provider: 'projects/588006826849/locations/global/workloadIdentityPools/git-pool/providers/github'
-        service_account: 'github-act-svc@awesome-pilot-439007-s9.iam.gserviceaccount.com'
-        audience: 'g-actions'
+    # - name: Authenticate to GCP
+    #   id: auth
+    #   uses: google-github-actions/auth@v2
+    #   with:
+    #     workload_identity_provider: 'projects/588006826849/locations/global/workloadIdentityPools/git-pool/providers/github'
+    #     service_account: 'github-act-svc@awesome-pilot-439007-s9.iam.gserviceaccount.com'
+    #     audience: 'g-actions'
 
 
-    - id: 'gcloud'
-      name: 'gcloud'
-      run: |-
-        gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
-        gcloud services list
-        gcloud config list
-        gcloud auth list
-        gcloud projects list
-        gcloud functions list --regions=us-east4
-        gcloud functions deploy nodefunction33 \
-              --verbosity=debug \
-              --region=us-east4 \
-              --runtime=nodejs20 \
-              --trigger-http \
-              --memory=512MB
-              --source=./function1/
+    # - id: 'gcloud'
+    #   name: 'gcloud'
+    #   run: |-
+    #     gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
+    #     gcloud services list
+    #     gcloud config list
+    #     gcloud auth list
+    #     gcloud projects list
+    #     gcloud functions list --regions=us-east4
+    #     gcloud functions deploy nodefunction33 \
+    #           --verbosity=debug \
+    #           --region=us-east4 \
+    #           --runtime=nodejs20 \
+    #           --trigger-http \
+    #           --memory=512MB
+    #           --source=./function1/
 
     # - name: 'Set up Cloud SDK'
     #   uses: 'google-github-actions/setup-gcloud@v2'
