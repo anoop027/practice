@@ -68,7 +68,9 @@ jobs:
         sudo mv gitleaks /usr/local/bin/gitleaks
 
     - name: Run Gitleaks
-      run: gitleaks detect --source . --report-path gitleaks-report.json --report-format json
+      run: |
+        ls -la
+        gitleaks detect --source . --report-path gitleaks-report.json --report-format json
 
     - name: Upload Gitleaks report
       uses: actions/upload-artifact@v3
