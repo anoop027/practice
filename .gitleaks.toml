@@ -1,0 +1,9 @@
+[[rules]]
+description = "Generic Secrets"
+regex = '''(?i)(SECRET|API_KEY|ACCESS_TOKEN)=["']?[A-Za-z0-9]{6,}["']?'''
+tags = ["generic"]
+
+[[rules]]
+description = "Numeric Secrets"
+regex = '''\b\d{6,}\b'''
+tags = ["numeric"]
