@@ -70,7 +70,7 @@ jobs:
     - name: Run Gitleaks
       run: |
         ls -la
-        gitleaks detect --source . --report-path gitleaks-report.json --report-format json
+        gitleaks detect --source . --report-path gitleaks-report.json --report-format json --config-path .gitleaks.toml 
 
     - name: Upload Gitleaks report
       uses: actions/upload-artifact@v3
